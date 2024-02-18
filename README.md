@@ -37,3 +37,19 @@ Abychom věděli, jak se dá útočit, musíme nejdřív pochopit základ webu:
       - takhle typicky funguje přihlášení - **Cookies**
 
 Ukázka GET+POST formů: http://localhost:7000/
+
+## Útoky na server
+
+### 1. Neošetření uživatelského vstupu - cesty (PHP)
+
+Ukázka:
+* http://localhost:7001/
+* http://localhost:7001/?stranka=kontakty
+* http://localhost:7001/?stranka=../../db.conf
+* http://localhost:7001/?stranka=../../../../../../../etc/passwd
+* bonus: http://localhost:7001/?stranka=../index.php :D
+
+Oprava:
+* http://localhost:7001/index2.php
+* http://localhost:7001/index2.php?stranka=../../db.conf
+* http://localhost:7001/index2.php?stranka=../../../../../../../etc/passwd
