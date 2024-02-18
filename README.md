@@ -4,6 +4,7 @@ Osnova a příprava přednášky.
 
 Příprava PHP prostředí:
 ```sh
+sudo apt install php-fpm php-sqlite3
 sudo cp etc/php-fpm-jirka.conf /etc/php/8.2/fpm/pool.d/
 sudo systemctl restart php8.2-fpm.service
 nginx -p $(pwd) -c etc/nginx.conf
@@ -66,3 +67,39 @@ Oprava:
   * kontrolovat důkladně soubory
   * nebo jim dokonce dávat generická jména
   * http://localhost:7002/index2.php
+
+### 3. SQL injection (PHP)
+
+* občas potřebujeme databázi, ukázka na http://localhost:7003/
+  * jednoduchá aplikace - ukládám a získávám klíče
+
+Můžeme zkusit poslat zajímavé payloady:
+* https://xkcd.com/327/ :D
+
+```sql
+' OR 'a'='a`
+" OR "a"="a`
+```
+
+Když chceme přidat něco dalšího (třeba LIMIT), lze využít trik s SQL komentářem
+(za komentářem musí být mezera):
+
+```sql
+' OR 1 = 1 LIMIT 1 OFFSET 1; --
+' OR 1 = 1 LIMIT 1 OFFSET 2; --
+```
+
+Jak se bránit? Escapovat!
+* ideálně jazykové knihovny, ruční escapování je náchylné k tomu napsat správně
+  a escapovat všechny speciální znaky
+  * jak escapuje SQLite, víme to?
+    * https://www.sqlite.org/lang_expr.html
+    * zdvojuje `'`
+    * lepší použít `SQLite3::escapeString` funkci
+  * jak escapuje MySQL?
+    * https://www.php.net/manual/en/security.database.sql-injection.php
+    * escapuje pomocí `\`
+    * lepší použít
+
+* nebo lze použít předpřipravené SQL statementy a doplnit jako proměnné
+* oboje viz index2.php
