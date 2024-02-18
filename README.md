@@ -53,3 +53,16 @@ Oprava:
 * http://localhost:7001/index2.php
 * http://localhost:7001/index2.php?stranka=../../db.conf
 * http://localhost:7001/index2.php?stranka=../../../../../../../etc/passwd
+
+### 2. Upload souboru (PHP)
+
+* upload souborů je nebezpečný
+  * formulář na upload obrázků do složky images/ (aby šly použít třeba v komentářích)
+  * http://localhost:7002/
+  * umožňuje ale i upload třeba souboru `02_upload/utok.php`
+    * je to PHP soubor s příponou .php -> přistoupíme do http://localhost:7002/images/utok.php
+    * ... a můžeme dělat cokoliv, co nám PHP povolí
+* obrana:
+  * kontrolovat důkladně soubory
+  * nebo jim dokonce dávat generická jména
+  * http://localhost:7002/index2.php
