@@ -171,3 +171,29 @@ https://medium.com/@dilarauluturhan/javascript-xss-cross-site-scripting-and-csrf
 4. Zkopírujeme si obsah PHPSESSID a voilá, jsme admin :D
 
 https://github.com/R0B1NL1N/WebHacking101/blob/master/xss-reflected-steal-cookie.md
+
+### 6. CSRF
+
+* nebudu útočit na web přímo, ale budu útočit přes uživatele
+  * jiný uživatel (typicky administrátor) má výrazně větší práva
+  * můžu ho donutit udělat něco, co nechce
+
+* Jednoduchý web podobný příkladu v XSS, ale jenom přihlášený může přidávat příspěvky a lajkovat je: http://localhost:7006/
+
+* přinutíme přihlášeného administrátora navštívit náš web:
+  * http://localhost:7016/ -> rozcestník
+  * http://localhost:7016/utok1.html -> přes obrázek (GET)
+  * http://localhost:7016/utok2.html -> přes odeslání formu ve skrytém iframe (POST)
+
+* Obrana: CSRF cookie:
+  * cílem je zařídit, aby útočník nevěděl, co má poslat
+  * do formu přidáme speciální klíč (CSRF token)
+    * hodnota předaná v cookie
+    * pokud není nasetována cookie, nasetujeme ji na random hodnotu
+
+
+## Útoky MITM
+
+* s HTTPS je těžké
+* obecně povídání o certifikátech a certifikačních autoritách
+  * Lets Encrypt
