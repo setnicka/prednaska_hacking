@@ -7,12 +7,13 @@ Příprava PHP prostředí:
 sudo apt install php-fpm php-sqlite3
 sudo cp etc/php-fpm-jirka.conf /etc/php/8.2/fpm/pool.d/
 sudo systemctl restart php8.2-fpm.service
+
 nginx -p $(pwd) -c etc/nginx.conf
 ```
 
 Cleanup PHP prostředí:
 ```sh
-sudo /etc/php/8.2/fpm/pool.d/php-fpm-jirka.conf
+sudo rm /etc/php/8.2/fpm/pool.d/php-fpm-jirka.conf
 sudo systemctl restart php8.2-fpm.service
 ```
 
@@ -44,6 +45,7 @@ Ukázka GET+POST formů: http://localhost:7000/
 ### 1. Neošetření uživatelského vstupu - cesty (PHP)
 
 Ukázka:
+
 * http://localhost:7001/
 * http://localhost:7001/?stranka=kontakty
 * http://localhost:7001/?stranka=../../db.conf
@@ -51,6 +53,7 @@ Ukázka:
 * bonus: http://localhost:7001/?stranka=../index.php :D
 
 Oprava:
+
 * http://localhost:7001/index2.php
 * http://localhost:7001/index2.php?stranka=../../db.conf
 * http://localhost:7001/index2.php?stranka=../../../../../../../etc/passwd
@@ -99,7 +102,7 @@ Jak se bránit? Escapovat!
   * jak escapuje MySQL?
     * https://www.php.net/manual/en/security.database.sql-injection.php
     * escapuje pomocí `\`
-    * lepší použít
+    * lepší použít `mysqli_real_escape_string` funkci
 
 * nebo lze použít předpřipravené SQL statementy a doplnit jako proměnné
 * oboje viz index2.php

@@ -50,10 +50,7 @@ if (isset($_POST["new_key"])) {
 
 	# NE: $sql = "SELECT * FROM keyval WHERE key='$key'";
 
-
 	$sql = "SELECT * FROM keyval WHERE key='".SQLite3::escapeString($key)."'";
-
-
 
 	# Pro ukázku, jak to dělá MySQL (dummy user):
 	$mysql = new mysqli('localhost', 'sql_injection_user', 'eiMeijiewaThiile3zei');
