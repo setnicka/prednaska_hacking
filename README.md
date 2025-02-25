@@ -5,16 +5,16 @@ Osnova a příprava přednášky.
 Příprava PHP prostředí:
 ```sh
 sudo apt install php-fpm php-sqlite3
-sudo cp etc/php-fpm-jirka.conf /etc/php/8.2/fpm/pool.d/
-sudo systemctl restart php8.2-fpm.service
+sudo cp etc/php-fpm-jirka.conf /etc/php/8.4/fpm/pool.d/
+sudo systemctl restart php8.4-fpm.service
 
 nginx -p $(pwd) -c etc/nginx.conf
 ```
 
 Cleanup PHP prostředí:
 ```sh
-sudo rm /etc/php/8.2/fpm/pool.d/php-fpm-jirka.conf
-sudo systemctl restart php8.2-fpm.service
+sudo rm /etc/php/8.4/fpm/pool.d/php-fpm-jirka.conf
+sudo systemctl restart php8.4-fpm.service
 ```
 
 ## Jak funguje web?
